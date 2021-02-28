@@ -1,3 +1,5 @@
+import images from './pieces'
+
 export enum Colour {
     Black = 'black',
     White = 'white',
@@ -19,5 +21,9 @@ export class Piece {
     constructor(type: PieceType, colour: Colour) {
         this.type = type
         this.colour = colour
+    }
+
+    getImage() {
+        return images[`${this.colour}_${this.type}`]
     }
 }

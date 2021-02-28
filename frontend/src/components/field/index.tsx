@@ -1,15 +1,19 @@
 import React from 'react'
 import styles from './style.module.scss'
-import queen from './pieces/white_queen.png'
+import { Piece } from '../../model/piece'
 
 interface Props {
     index: number
+    piece: Piece
 }
 
-const Field: React.FC<Props> = ({ index }: Props): React.ReactElement => {
+const Field: React.FC<Props> = ({
+    index,
+    piece,
+}: Props): React.ReactElement => {
     return (
         <div className={styles.field} onClick={() => console.log(index)}>
-            <img src={queen} className={styles.piece} />
+            {piece && <img src={piece.getImage()} className={styles.piece} />}
         </div>
     )
 }
