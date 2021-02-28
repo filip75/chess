@@ -1,0 +1,20 @@
+.field {
+    &:before {
+        content: '';
+        display: block;
+        padding-top: 100%;
+    }
+
+    background-color: white;
+
+    &:nth-of-type(-2n + 8),
+    &:nth-of-type(8) ~ *:nth-of-type(-2n + 15),
+    &:nth-of-type(16) ~ *:nth-of-type(-2n + 24),
+    &:nth-of-type(24) ~ *:nth-of-type(-2n + 31),
+    &:nth-of-type(32) ~ *:nth-of-type(-2n + 40),
+    &:nth-of-type(40) ~ *:nth-of-type(-2n + 47),
+    &:nth-of-type(48) ~ *:nth-of-type(-2n + 56),
+    &:nth-of-type(56) ~ *:nth-of-type(-2n + 63) {
+        background-color: black;
+    }
+}

@@ -1,18 +1,13 @@
 import React from 'react'
+import styles from './style.module.scss'
 
 interface Props {
-    colour: string
     index: number
 }
 
-const Field: React.FC<Props> = ({
-    colour,
-    index,
-}: Props): React.ReactElement => {
+const Field: React.FC<Props> = ({ index }: Props): React.ReactElement => {
     return (
-        <div className={colour} onClick={() => console.log(index)}>
-            {index}
-        </div>
+        <div className={styles.field} onClick={() => console.log(index)}></div>
     )
 }
 
