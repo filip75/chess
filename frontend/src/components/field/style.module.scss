@@ -1,11 +1,19 @@
 .field {
-    &:before {
+    background-color: white;
+    position: relative;
+
+    &:after {
         content: '';
         display: block;
-        padding-top: 100%;
+        padding-bottom: 100%;
     }
 
-    background-color: white;
+    .content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 
     &:nth-of-type(-2n + 8),
     &:nth-of-type(8) ~ *:nth-of-type(-2n + 15),
