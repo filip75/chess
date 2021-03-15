@@ -1,52 +1,65 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { range } from '../../missing'
 import { Colour, Piece, PieceType } from '../../model/piece'
-import Field from '../field'
+import FieldComponent from '../fieldComponent'
 import styles from './style.module.scss'
+import Field from '../../model/field'
+
+const prepareBoard = (): Field[] => {
+    const board = range(64).map(() => new Field())
+    board[0].piece = new Piece(PieceType.Rook, Colour.Black)
+    board[1].piece = new Piece(PieceType.Bishop, Colour.Black)
+    board[2].piece = new Piece(PieceType.Knight, Colour.Black)
+    board[3].piece = new Piece(PieceType.Queen, Colour.Black)
+    board[4].piece = new Piece(PieceType.King, Colour.Black)
+    board[5].piece = new Piece(PieceType.Knight, Colour.Black)
+    board[6].piece = new Piece(PieceType.Bishop, Colour.Black)
+    board[7].piece = new Piece(PieceType.Rook, Colour.Black)
+    board[8].piece = new Piece(PieceType.Pawn, Colour.Black)
+    board[9].piece = new Piece(PieceType.Pawn, Colour.Black)
+    board[10].piece = new Piece(PieceType.Pawn, Colour.Black)
+    board[11].piece = new Piece(PieceType.Pawn, Colour.Black)
+    board[12].piece = new Piece(PieceType.Pawn, Colour.Black)
+    board[13].piece = new Piece(PieceType.Pawn, Colour.Black)
+    board[14].piece = new Piece(PieceType.Pawn, Colour.Black)
+    board[15].piece = new Piece(PieceType.Pawn, Colour.Black)
+    board[48].piece = new Piece(PieceType.Pawn, Colour.White)
+    board[49].piece = new Piece(PieceType.Pawn, Colour.White)
+    board[50].piece = new Piece(PieceType.Pawn, Colour.White)
+    board[51].piece = new Piece(PieceType.Pawn, Colour.White)
+    board[52].piece = new Piece(PieceType.Pawn, Colour.White)
+    board[53].piece = new Piece(PieceType.Pawn, Colour.White)
+    board[54].piece = new Piece(PieceType.Pawn, Colour.White)
+    board[55].piece = new Piece(PieceType.Pawn, Colour.White)
+    board[56].piece = new Piece(PieceType.Rook, Colour.White)
+    board[57].piece = new Piece(PieceType.Bishop, Colour.White)
+    board[58].piece = new Piece(PieceType.Knight, Colour.White)
+    board[59].piece = new Piece(PieceType.Queen, Colour.White)
+    board[60].piece = new Piece(PieceType.King, Colour.White)
+    board[61].piece = new Piece(PieceType.Knight, Colour.White)
+    board[62].piece = new Piece(PieceType.Bishop, Colour.White)
+    board[63].piece = new Piece(PieceType.Rook, Colour.White)
+    return board
+}
 
 const Board: React.FC = (): React.ReactElement => {
-    const pieces = {
-        0: new Piece(PieceType.Rook, Colour.Black),
-        1: new Piece(PieceType.Bishop, Colour.Black),
-        2: new Piece(PieceType.Knight, Colour.Black),
-        3: new Piece(PieceType.Queen, Colour.Black),
-        4: new Piece(PieceType.King, Colour.Black),
-        5: new Piece(PieceType.Knight, Colour.Black),
-        6: new Piece(PieceType.Bishop, Colour.Black),
-        7: new Piece(PieceType.Rook, Colour.Black),
-        8: new Piece(PieceType.Pawn, Colour.Black),
-        9: new Piece(PieceType.Pawn, Colour.Black),
-        10: new Piece(PieceType.Pawn, Colour.Black),
-        11: new Piece(PieceType.Pawn, Colour.Black),
-        12: new Piece(PieceType.Pawn, Colour.Black),
-        13: new Piece(PieceType.Pawn, Colour.Black),
-        14: new Piece(PieceType.Pawn, Colour.Black),
-        15: new Piece(PieceType.Pawn, Colour.Black),
-        48: new Piece(PieceType.Pawn, Colour.White),
-        49: new Piece(PieceType.Pawn, Colour.White),
-        50: new Piece(PieceType.Pawn, Colour.White),
-        51: new Piece(PieceType.Pawn, Colour.White),
-        52: new Piece(PieceType.Pawn, Colour.White),
-        53: new Piece(PieceType.Pawn, Colour.White),
-        54: new Piece(PieceType.Pawn, Colour.White),
-        55: new Piece(PieceType.Pawn, Colour.White),
-        56: new Piece(PieceType.Rook, Colour.White),
-        57: new Piece(PieceType.Bishop, Colour.White),
-        58: new Piece(PieceType.Knight, Colour.White),
-        59: new Piece(PieceType.Queen, Colour.White),
-        60: new Piece(PieceType.King, Colour.White),
-        61: new Piece(PieceType.Knight, Colour.White),
-        62: new Piece(PieceType.Bishop, Colour.White),
-        63: new Piece(PieceType.Rook, Colour.White),
+    const [board, setBoard] = useState(prepareBoard())
+    const move = (i: number): void => {
+        const b = [...board]
+        b[i].piece = new Piece(PieceType.Pawn, Colour.White)
+        setBoard(b)
+        console.log(i)
     }
+
     return (
         <div className={styles.board}>
             {range(64).map(
                 (n: number): React.ReactElement => (
-                    <Field
+                    <FieldComponent
                         key={n}
                         index={n}
-                        piece={n in pieces ? pieces[n] : null}
+                        piece={board.length > n ? board[n].piece : null}
+                        move={move}
                     />
                 )
             )}

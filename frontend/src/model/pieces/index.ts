@@ -11,7 +11,11 @@ import white_pawn from './white_pawn.png'
 import white_queen from './white_queen.png'
 import white_rook from './white_rook.png'
 
-const images = {
+interface IObjectKeys {
+    [key: string]: string
+}
+
+const images: IObjectKeys = {
     black_bishop,
     black_king,
     black_knight,

@@ -4,18 +4,20 @@ import { Piece } from '../../model/piece'
 
 interface Props {
     index: number
-    piece: Piece
+    piece: Piece | null
+    move: (i: number) => void
 }
 
-const Field: React.FC<Props> = ({
+const FieldComponent: React.FC<Props> = ({
     index,
     piece,
+    move,
 }: Props): React.ReactElement => {
     return (
-        <div className={styles.field} onClick={() => console.log(index)}>
+        <div className={styles.field} onClick={() => move(index)}>
             {piece && <img src={piece.getImage()} className={styles.piece} />}
         </div>
     )
 }
 
-export default Field
+export default FieldComponent

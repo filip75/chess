@@ -23,7 +23,7 @@ export class Piece {
         this.colour = colour
     }
 
-    getImage() {
+    getImage(): string {
         return images[`${this.colour}_${this.type}`]
     }
 }
