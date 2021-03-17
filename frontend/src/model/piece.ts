@@ -14,6 +14,13 @@ export enum PieceType {
     King = 'king',
 }
 
+export const getImage = (
+    pieceType: PieceType | null,
+    pieceColour: Colour | null
+): string | null => {
+    return pieceType && pieceColour && images[`${pieceColour}_${pieceType}`]
+}
+
 export class Piece {
     colour: Colour
     type: PieceType

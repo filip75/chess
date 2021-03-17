@@ -1,21 +1,22 @@
 import React from 'react'
 import styles from './style.module.scss'
-import { Piece } from '../../model/piece'
+import { Colour, getImage, PieceType } from '../../model/piece'
 
 interface Props {
     index: number
-    piece: Piece | null
-    move: (i: number) => void
+    pieceType: PieceType | null
+    pieceColour: Colour | null
 }
 
 const FieldComponent: React.FC<Props> = ({
     index,
-    piece,
-    move,
+    pieceType,
+    pieceColour,
 }: Props): React.ReactElement => {
+    const image = getImage(pieceType, pieceColour)
     return (
-        <div className={styles.field} onClick={() => move(index)}>
-            {piece && <img src={piece.getImage()} className={styles.piece} />}
+        <div className={styles.field}>
+            {image && <img src={image} className={styles.piece} />}
         </div>
     )
 }

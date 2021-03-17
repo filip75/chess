@@ -1,55 +1,73 @@
-import React, { useState } from 'react'
+import React, { useReducer } from 'react'
 import { range } from '../../missing'
-import { Colour, Piece, PieceType } from '../../model/piece'
+import { Colour, PieceType } from '../../model/piece'
 import FieldComponent from '../fieldComponent'
+import { Field } from '../interface'
 import styles from './style.module.scss'
-import Field from '../../model/field'
 
-const prepareBoard = (): Field[] => {
-    const board = range(64).map(() => new Field())
-    board[0].piece = new Piece(PieceType.Rook, Colour.Black)
-    board[1].piece = new Piece(PieceType.Bishop, Colour.Black)
-    board[2].piece = new Piece(PieceType.Knight, Colour.Black)
-    board[3].piece = new Piece(PieceType.Queen, Colour.Black)
-    board[4].piece = new Piece(PieceType.King, Colour.Black)
-    board[5].piece = new Piece(PieceType.Knight, Colour.Black)
-    board[6].piece = new Piece(PieceType.Bishop, Colour.Black)
-    board[7].piece = new Piece(PieceType.Rook, Colour.Black)
-    board[8].piece = new Piece(PieceType.Pawn, Colour.Black)
-    board[9].piece = new Piece(PieceType.Pawn, Colour.Black)
-    board[10].piece = new Piece(PieceType.Pawn, Colour.Black)
-    board[11].piece = new Piece(PieceType.Pawn, Colour.Black)
-    board[12].piece = new Piece(PieceType.Pawn, Colour.Black)
-    board[13].piece = new Piece(PieceType.Pawn, Colour.Black)
-    board[14].piece = new Piece(PieceType.Pawn, Colour.Black)
-    board[15].piece = new Piece(PieceType.Pawn, Colour.Black)
-    board[48].piece = new Piece(PieceType.Pawn, Colour.White)
-    board[49].piece = new Piece(PieceType.Pawn, Colour.White)
-    board[50].piece = new Piece(PieceType.Pawn, Colour.White)
-    board[51].piece = new Piece(PieceType.Pawn, Colour.White)
-    board[52].piece = new Piece(PieceType.Pawn, Colour.White)
-    board[53].piece = new Piece(PieceType.Pawn, Colour.White)
-    board[54].piece = new Piece(PieceType.Pawn, Colour.White)
-    board[55].piece = new Piece(PieceType.Pawn, Colour.White)
-    board[56].piece = new Piece(PieceType.Rook, Colour.White)
-    board[57].piece = new Piece(PieceType.Bishop, Colour.White)
-    board[58].piece = new Piece(PieceType.Knight, Colour.White)
-    board[59].piece = new Piece(PieceType.Queen, Colour.White)
-    board[60].piece = new Piece(PieceType.King, Colour.White)
-    board[61].piece = new Piece(PieceType.Knight, Colour.White)
-    board[62].piece = new Piece(PieceType.Bishop, Colour.White)
-    board[63].piece = new Piece(PieceType.Rook, Colour.White)
-    return board
+const placePiece = (
+    field: Field,
+    pieceType: PieceType,
+    pieceColour: Colour
+): Field => {
+    return {
+        ...field,
+        pieceType,
+        pieceColour,
+    }
+}
+
+const prepareBoard = (): BoardState => {
+    const fields = range(64).map(
+        (): Field => ({
+            pieceType: null,
+            pieceColour: null,
+            marked: false,
+            possible: false,
+        })
+    )
+
+    fields[0] = placePiece(fields[0], PieceType.Rook, Colour.Black)
+    fields[1] = placePiece(fields[1], PieceType.Bishop, Colour.Black)
+    fields[2] = placePiece(fields[2], PieceType.Knight, Colour.Black)
+    fields[3] = placePiece(fields[3], PieceType.Queen, Colour.Black)
+    fields[4] = placePiece(fields[4], PieceType.King, Colour.Black)
+    fields[5] = placePiece(fields[5], PieceType.Knight, Colour.Black)
+    fields[6] = placePiece(fields[6], PieceType.Bishop, Colour.Black)
+    fields[7] = placePiece(fields[7], PieceType.Rook, Colour.Black)
+    fields[8] = placePiece(fields[8], PieceType.Pawn, Colour.Black)
+    fields[9] = placePiece(fields[9], PieceType.Pawn, Colour.Black)
+    fields[10] = placePiece(fields[10], PieceType.Pawn, Colour.Black)
+    fields[11] = placePiece(fields[11], PieceType.Pawn, Colour.Black)
+    fields[12] = placePiece(fields[12], PieceType.Pawn, Colour.Black)
+    fields[13] = placePiece(fields[13], PieceType.Pawn, Colour.Black)
+    fields[14] = placePiece(fields[14], PieceType.Pawn, Colour.Black)
+    fields[15] = placePiece(fields[15], PieceType.Pawn, Colour.Black)
+
+    return { fields, marked: false }
+}
+
+interface BoardState {
+    fields: Field[]
+    marked: boolean
+}
+
+interface ActionType {
+    type: string
+    payload: any // TODO set proper type
+}
+
+const boardReducer = (state: BoardState, action: ActionType): BoardState => {
+    switch (action.type) {
+        // case 'MARK':
+
+        default:
+            throw new Error(`unsupported action: ${action.type}`)
+    }
 }
 
 const Board: React.FC = (): React.ReactElement => {
-    const [board, setBoard] = useState(prepareBoard())
-    const move = (i: number): void => {
-        const b = [...board]
-        b[i].piece = new Piece(PieceType.Pawn, Colour.White)
-        setBoard(b)
-        console.log(i)
-    }
+    const [board, boardDispatch] = useReducer(boardReducer, prepareBoard())
 
     return (
         <div className={styles.board}>
@@ -58,8 +76,8 @@ const Board: React.FC = (): React.ReactElement => {
                     <FieldComponent
                         key={n}
                         index={n}
-                        piece={board.length > n ? board[n].piece : null}
-                        move={move}
+                        pieceType={board.fields[n].pieceType}
+                        pieceColour={board.fields[n].pieceColour}
                     />
                 )
             )}
