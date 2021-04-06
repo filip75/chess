@@ -59,7 +59,15 @@ interface ActionType {
 
 const boardReducer = (state: BoardState, action: ActionType): BoardState => {
     switch (action.type) {
-        // case 'MARK':
+        case 'MARK': {
+            const f: Field = {
+                ...state.fields[action.payload.index],
+                marked: true,
+            }
+            const fields = [...state.fields]
+            fields[action.payload.index] = f
+            return { ...state, fields }
+        }
 
         default:
             throw new Error(`unsupported action: ${action.type}`)
@@ -78,6 +86,10 @@ const Board: React.FC = (): React.ReactElement => {
                         index={n}
                         pieceType={board.fields[n].pieceType}
                         pieceColour={board.fields[n].pieceColour}
+                        marked={board.fields[n].marked}
+                        onClick={(index: number) =>
+                            boardDispatch({ type: 'MARK', payload: { index } })
+                        }
                     />
                 )
             )}
