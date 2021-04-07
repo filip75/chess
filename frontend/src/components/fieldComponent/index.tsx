@@ -1,23 +1,22 @@
 import React from 'react'
 import styles from './style.module.scss'
-import { Colour, getImage, PieceType } from '../../model/piece'
+import { getImage } from '../../model/piece'
+import { Piece } from '../interface'
 
 interface Props {
     index: number
-    pieceType: PieceType | null
-    pieceColour: Colour | null
+    piece: Piece | null
     marked: boolean
     onClick: (index: number) => void
 }
 
 const FieldComponent: React.FC<Props> = ({
     index,
-    pieceType,
-    pieceColour,
+    piece,
     marked,
     onClick,
 }: Props): React.ReactElement => {
-    const image = getImage(pieceType, pieceColour)
+    const image = getImage(piece)
     return (
         <div
             className={`${styles.field} ${marked ? styles.marked : ''}`}

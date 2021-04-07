@@ -1,3 +1,4 @@
+import { Piece } from '../components/interface'
 import images from './pieces'
 
 export enum Colour {
@@ -14,23 +15,6 @@ export enum PieceType {
     King = 'king',
 }
 
-export const getImage = (
-    pieceType: PieceType | null,
-    pieceColour: Colour | null
-): string | null => {
-    return pieceType && pieceColour && images[`${pieceColour}_${pieceType}`]
-}
-
-export class Piece {
-    colour: Colour
-    type: PieceType
-
-    constructor(type: PieceType, colour: Colour) {
-        this.type = type
-        this.colour = colour
-    }
-
-    getImage(): string {
-        return images[`${this.colour}_${this.type}`]
-    }
+export const getImage = (piece: Piece | null): string | null => {
+    return piece && images[`${piece.colour}_${piece.type}`]
 }

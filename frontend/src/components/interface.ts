@@ -1,8 +1,10 @@
 import { Colour, PieceType } from '../model/piece'
 
+export interface Piece {
+    type: PieceType
+    colour: Colour
+}
 export interface Field {
-    pieceType: PieceType | null
-    pieceColour: Colour | null
-    marked: boolean
+    piece: Piece | null
     possible: boolean
 }
