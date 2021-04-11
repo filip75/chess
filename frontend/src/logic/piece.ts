@@ -1,5 +1,5 @@
-import { Piece } from '../components/interface'
-import images from './pieces'
+import { Piece } from './interface'
+import images from './piecesImages'
 
 export enum Colour {
     Black = 'black',
