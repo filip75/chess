@@ -12,11 +12,11 @@ import styles from './style.module.scss'
 import { createBoard, GameType } from '../../logic/boardFactory'
 import { cleanPossible, markPossible } from '../../logic/boardTransforamtions'
 
-const prepareBoard = (): BoardState => {
+const prepareBoard = (colour: Colour): BoardState => {
     return {
-        fields: createBoard(GameType.Regular, Colour.Black),
+        fields: createBoard(GameType.Regular, colour),
         marked: null,
-        playerColour: Colour.Black,
+        playerColour: colour,
     }
 }
 
@@ -85,7 +85,11 @@ const boardReducer = (state: BoardState, action: ActionType): BoardState => {
 }
 
 const Board: React.FC = (): React.ReactElement => {
-    const [board, boardDispatch] = useReducer(boardReducer, null, prepareBoard)
+    const [board, boardDispatch] = useReducer(
+        boardReducer,
+        Colour.White,
+        prepareBoard
+    )
 
     return (
         <div className={styles.board}>

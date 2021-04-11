@@ -152,7 +152,17 @@ export const createBoard = (type: GameType, colour: Colour): Field[] => {
                 colour: Colour.White,
             })
 
-            return fields
+            if (colour == Colour.Black) {
+                return [
+                    ...fields.slice(56, 64),
+                    ...fields.slice(48, 56),
+                    ...fields.slice(16, 48),
+                    ...fields.slice(8, 16),
+                    ...fields.slice(0, 8),
+                ]
+            } else {
+                return fields
+            }
         }
         default:
             throw new Error(`unsupported GameType: ${type}`)
