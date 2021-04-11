@@ -2,7 +2,7 @@ import React, { useReducer } from 'react'
 import { range } from '../../missing'
 import { Colour, PieceType } from '../../model/piece'
 import FieldComponent from '../fieldComponent'
-import { Field, Piece } from '../interface'
+import { Field, hasPieceColour, isFieldEmpty, Piece } from '../interface'
 import styles from './style.module.scss'
 
 const placePiece = (field: Field, piece: Piece): Field => {
@@ -84,39 +84,73 @@ const prepareBoard = (): BoardState => {
         type: PieceType.Pawn,
         colour: Colour.Black,
     })
+    fields[16] = placePiece(fields[15], {
+        type: PieceType.Pawn,
+        colour: Colour.White,
+    })
 
-    return { fields, marked: null }
+    return { fields, marked: null, playerColour: Colour.Black }
 }
 
 interface BoardState {
     fields: Field[]
     marked: number | null
+    playerColour: Colour
 }
 
 interface ActionType {
     type: string
-    payload: any // TODO set proper type
+    payload: { index: number }
+}
+
+const movePiece = (state: BoardState, from: number, to: number): BoardState => {
+    const fieldsCopy: Field[] = state.fields.map((field) => ({ ...field }))
+    fieldsCopy[to].piece = fieldsCopy[from].piece
+    fieldsCopy[from].piece = null
+    return {
+        ...state,
+        fields: fieldsCopy,
+        marked: null,
+    }
+}
+
+const markField = (state: BoardState, index: number): BoardState => {
+    return { ...state, marked: index }
 }
 
 const boardReducer = (state: BoardState, action: ActionType): BoardState => {
     switch (action.type) {
-        case 'MARK': {
-            const index: number = action.payload.index
-            const f: Field = {
-                ...state.fields[action.payload.index],
-            }
-            const fields = [...state.fields]
-            fields[action.payload.index] = f
-            return { ...state, fields, marked: index }
-        }
+        case 'CLICK': {
+            const index = action.payload.index
+            const field = state.fields[index]
 
+            if (state.marked === null) {
+                if (
+                    !isFieldEmpty(field) &&
+                    hasPieceColour(field.piece, state.playerColour)
+                ) {
+                    return markField(state, index)
+                }
+            } else {
+                if (isFieldEmpty(field)) {
+                    return movePiece(state, state.marked, index)
+                } else {
+                    if (hasPieceColour(field.piece, state.playerColour)) {
+                        return markField(state, index)
+                    } else {
+                        // TODO handle capture
+                    }
+                }
+            }
+            return state
+        }
         default:
             throw new Error(`unsupported action: ${action.type}`)
     }
 }
 
 const Board: React.FC = (): React.ReactElement => {
-    const [board, boardDispatch] = useReducer(boardReducer, prepareBoard())
+    const [board, boardDispatch] = useReducer(boardReducer, null, prepareBoard)
 
     return (
         <div className={styles.board}>
@@ -128,7 +162,7 @@ const Board: React.FC = (): React.ReactElement => {
                         piece={board.fields[n].piece}
                         marked={board.marked ? board.marked === n : false}
                         onClick={(index: number) =>
-                            boardDispatch({ type: 'MARK', payload: { index } })
+                            boardDispatch({ type: 'CLICK', payload: { index } })
                         }
                     />
                 )
