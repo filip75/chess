@@ -1,4 +1,4 @@
-import { Coordinates, Field } from './interface'
+import { Coordinates, Field, Piece } from './interface'
 import { PieceType } from './piece'
 
 const indexToCoordinates = (index: number, dimension = 8): Coordinates => {
@@ -10,6 +10,16 @@ const indexToCoordinates = (index: number, dimension = 8): Coordinates => {
 
 const coordinatesToIndex = (coordinate: Coordinates, dimension = 8): number => {
     return coordinate.row * dimension + coordinate.column
+}
+
+const shiftCoordinates = (
+    coordinates: Coordinates,
+    shift: Coordinates
+): Coordinates => {
+    return {
+        row: coordinates.row + shift.row,
+        column: coordinates.column + shift.column,
+    }
 }
 
 const isWithinBoard = (coordinate: Coordinates, dimension = 8): boolean => {
@@ -29,29 +39,68 @@ export const markPossible = (fields: Field[], index: number): void => {
     const piece = fields[index].piece
     const coordinates = indexToCoordinates(index)
 
-    let newPositions: Coordinates[]
+    const newPositions: Coordinates[] = []
 
     switch (piece?.type) {
         case PieceType.Knight:
             {
-                const rel = [
-                    [-2, -1],
-                    [-2, 1],
-                    [-1, -2],
-                    [-1, 2],
-                    [1, -2],
-                    [1, 2],
-                    [2, -1],
-                    [2, 1],
+                const shifts = [
+                    { row: -2, column: -1 },
+                    { row: -2, column: 1 },
+                    { row: -1, column: -2 },
+                    { row: -1, column: 2 },
+                    { row: 1, column: -2 },
+                    { row: 1, column: 2 },
+                    { row: 2, column: -1 },
+                    { row: 2, column: 1 },
                 ]
-                newPositions = rel.map((r) => ({
-                    row: coordinates.row + r[0],
-                    column: coordinates.column + r[1],
-                }))
+
+                let newCoordinates: Coordinates
+                shifts.forEach((shift) => {
+                    newCoordinates = shiftCoordinates(coordinates, shift)
+                    if (
+                        isWithinBoard(newCoordinates) &&
+                        fields[coordinatesToIndex(newCoordinates)].piece
+                            ?.colour !== piece.colour
+                    ) {
+                        newPositions.push(newCoordinates)
+                    }
+                })
             }
             break
-        default:
-            newPositions = []
+
+        case PieceType.Bishop: {
+            const shifts = [
+                { row: -1, column: -1 },
+                { row: -1, column: 1 },
+                { row: 1, column: -1 },
+                { row: 1, column: 1 },
+            ]
+
+            let newCoordinates: Coordinates
+            let anotherPiece
+            shifts.forEach((shift) => {
+                newCoordinates = shiftCoordinates(coordinates, shift)
+                while (
+                    isWithinBoard(newCoordinates) &&
+                    fields[coordinatesToIndex(newCoordinates)].piece?.colour !==
+                        piece.colour
+                ) {
+                    anotherPiece =
+                        fields[coordinatesToIndex(newCoordinates)].piece
+                    if (anotherPiece !== null) {
+                        if (anotherPiece.colour !== piece.colour) {
+                            newPositions.push(newCoordinates)
+                        }
+                        break
+                    } else {
+                        newPositions.push(newCoordinates)
+                    }
+                    newCoordinates = shiftCoordinates(newCoordinates, shift)
+                }
+            })
+            break
+        }
     }
     cleanPossible(fields)
     newPositions

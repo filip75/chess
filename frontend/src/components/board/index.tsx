@@ -87,7 +87,7 @@ const boardReducer = (state: BoardState, action: ActionType): BoardState => {
 const Board: React.FC = (): React.ReactElement => {
     const [board, boardDispatch] = useReducer(
         boardReducer,
-        Colour.White,
+        Colour.Black,
         prepareBoard
     )
 
