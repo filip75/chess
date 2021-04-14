@@ -1,5 +1,5 @@
-import { Coordinates, Field, Piece } from './interface'
-import { PieceType } from './piece'
+import { Coordinates, Field, hasOppositeColour } from './interface'
+import { Colour, PieceType } from './piece'
 
 const indexToCoordinates = (index: number, dimension = 8): Coordinates => {
     return {
@@ -35,7 +35,10 @@ export const cleanPossible = (fields: Field[]): void => {
     fields.forEach((f) => (f.possible = false))
 }
 
-export const markPossible = (fields: Field[], index: number): void => {
+const getPossibleCoordinates = (
+    fields: Field[],
+    index: number
+): Coordinates[] => {
     const piece = fields[index].piece
     const coordinates = indexToCoordinates(index)
 
@@ -60,8 +63,10 @@ export const markPossible = (fields: Field[], index: number): void => {
                     newCoordinates = shiftCoordinates(coordinates, shift)
                     if (
                         isWithinBoard(newCoordinates) &&
-                        fields[coordinatesToIndex(newCoordinates)].piece
-                            ?.colour !== piece.colour
+                        hasOppositeColour(
+                            fields[coordinatesToIndex(newCoordinates)].piece,
+                            piece.colour
+                        )
                     ) {
                         newPositions.push(newCoordinates)
                     }
@@ -89,7 +94,7 @@ export const markPossible = (fields: Field[], index: number): void => {
                     anotherPiece =
                         fields[coordinatesToIndex(newCoordinates)].piece
                     if (anotherPiece !== null) {
-                        if (anotherPiece.colour !== piece.colour) {
+                        if (hasOppositeColour(anotherPiece, piece.colour)) {
                             newPositions.push(newCoordinates)
                         }
                         break
@@ -102,10 +107,56 @@ export const markPossible = (fields: Field[], index: number): void => {
             break
         }
     }
+
+    return newPositions
+}
+
+const isCheck = (fields: Field[], playerColour: Colour | null): boolean => {
+    let check = false
+    fields.forEach((field, index) => {
+        if (field.piece !== null && field.piece.colour !== playerColour) {
+            const possibleCoordinates = getPossibleCoordinates(fields, index)
+            possibleCoordinates.forEach((position) => {
+                if (
+                    fields[coordinatesToIndex(position)].piece?.type ===
+                        PieceType.King &&
+                    fields[coordinatesToIndex(position)].piece?.colour ===
+                        playerColour
+                ) {
+                    check = true
+                }
+            })
+        }
+    })
+
+    return check
+}
+
+const movePiece = (fields: Field[], from: number, to: number): Field[] => {
+    fields[to].piece = fields[from].piece
+    fields[from].piece = null
+    return fields
+}
+
+const wouldBeCheck = (fields: Field[], from: number, to: number): boolean => {
+    const playerColour = fields[from].piece?.colour || null
+    const targetPiece = fields[to].piece
+    movePiece(fields, from, to)
+    const result = isCheck(fields, playerColour)
+    movePiece(fields, to, from)
+    fields[to].piece = targetPiece
+    return result
+}
+
+export const markPossible = (fields: Field[], index: number): void => {
+    const newCoordinates = getPossibleCoordinates(fields, index).filter(
+        (coordinates) => {
+            const newIndex = coordinatesToIndex(coordinates)
+            return !wouldBeCheck(fields, index, newIndex)
+        }
+    )
     cleanPossible(fields)
-    newPositions
-        .filter((c) => isWithinBoard(c))
-        .forEach((position) => {
-            fields[coordinatesToIndex(position)].possible = true
-        })
+    newCoordinates.forEach((position) => {
+        fields[coordinatesToIndex(position)].possible = true
+    })
 }

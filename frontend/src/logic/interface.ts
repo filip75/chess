@@ -22,10 +22,16 @@ export function isFieldPossibleToMoveTo(field: Field | null): boolean {
     return field?.possible !== true
 }
 
-export function hasPieceColour(field: Piece | null, colour: Colour): boolean {
-    return field?.colour === colour
+export function hasColour(piece: Piece | null, colour: Colour): boolean {
+    return piece?.colour === colour
 }
 
+export function hasOppositeColour(
+    piece: Piece | null,
+    colour: Colour
+): boolean {
+    return piece?.colour !== colour
+}
 export function deepCopyFields(fields: Field[]): Field[] {
     return fields.map((field) => ({ ...field }))
 }

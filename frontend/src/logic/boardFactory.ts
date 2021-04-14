@@ -5,7 +5,7 @@ import { Colour, PieceType } from './piece'
 export enum GameType {
     Regular = 'regular',
 }
-const placePiece = (field: Field, piece: Piece): Field => {
+const placePiece = (field: Field, piece: Piece | null): Field => {
     return {
         ...field,
         piece,
@@ -87,38 +87,38 @@ export const createBoard = (type: GameType, colour: Colour): Field[] => {
                 colour: Colour.Black,
             })
 
-            fields[48] = placePiece(fields[48], {
-                type: PieceType.Pawn,
-                colour: Colour.White,
-            })
-            fields[49] = placePiece(fields[49], {
-                type: PieceType.Pawn,
-                colour: Colour.White,
-            })
-            fields[50] = placePiece(fields[50], {
-                type: PieceType.Pawn,
-                colour: Colour.White,
-            })
-            fields[51] = placePiece(fields[51], {
-                type: PieceType.Pawn,
-                colour: Colour.White,
-            })
-            fields[52] = placePiece(fields[52], {
-                type: PieceType.Pawn,
-                colour: Colour.White,
-            })
-            fields[53] = placePiece(fields[53], {
-                type: PieceType.Pawn,
-                colour: Colour.White,
-            })
-            fields[54] = placePiece(fields[54], {
-                type: PieceType.Pawn,
-                colour: Colour.White,
-            })
-            fields[55] = placePiece(fields[55], {
-                type: PieceType.Pawn,
-                colour: Colour.White,
-            })
+            // fields[48] = placePiece(fields[48], {
+            //     type: PieceType.Pawn,
+            //     colour: Colour.White,
+            // })
+            // fields[49] = placePiece(fields[49], {
+            //     type: PieceType.Pawn,
+            //     colour: Colour.White,
+            // })
+            // fields[50] = placePiece(fields[50], {
+            //     type: PieceType.Pawn,
+            //     colour: Colour.White,
+            // })
+            // fields[51] = placePiece(fields[51], {
+            //     type: PieceType.Pawn,
+            //     colour: Colour.White,
+            // })
+            // fields[52] = placePiece(fields[52], {
+            //     type: PieceType.Pawn,
+            //     colour: Colour.White,
+            // })
+            // fields[53] = placePiece(fields[53], {
+            //     type: PieceType.Pawn,
+            //     colour: Colour.White,
+            // })
+            // fields[54] = placePiece(fields[54], {
+            //     type: PieceType.Pawn,
+            //     colour: Colour.White,
+            // })
+            // fields[55] = placePiece(fields[55], {
+            //     type: PieceType.Pawn,
+            //     colour: Colour.White,
+            // })
             fields[56] = placePiece(fields[56], {
                 type: PieceType.Rook,
                 colour: Colour.White,

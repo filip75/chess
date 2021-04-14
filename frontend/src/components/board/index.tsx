@@ -1,16 +1,16 @@
 import React, { useReducer } from 'react'
-import { range } from '../../missing'
-import { Colour } from '../../logic/piece'
-import FieldComponent from '../fieldComponent'
+import { createBoard, GameType } from '../../logic/boardFactory'
+import { cleanPossible, markPossible } from '../../logic/boardTransforamtions'
 import {
     deepCopyFields,
     Field,
-    hasPieceColour,
+    hasColour,
     isFieldEmpty,
 } from '../../logic/interface'
+import { Colour } from '../../logic/piece'
+import { range } from '../../missing'
+import FieldComponent from '../fieldComponent'
 import styles from './style.module.scss'
-import { createBoard, GameType } from '../../logic/boardFactory'
-import { cleanPossible, markPossible } from '../../logic/boardTransforamtions'
 
 const prepareBoard = (colour: Colour): BoardState => {
     return {
@@ -62,7 +62,7 @@ const boardReducer = (state: BoardState, action: ActionType): BoardState => {
             if (state.marked === null) {
                 if (
                     !isFieldEmpty(field) &&
-                    hasPieceColour(field.piece, state.playerColour)
+                    hasColour(field.piece, state.playerColour)
                 ) {
                     return markField(state, index)
                 }
@@ -70,7 +70,7 @@ const boardReducer = (state: BoardState, action: ActionType): BoardState => {
                 if (isFieldEmpty(field)) {
                     return movePiece(state, state.marked, index)
                 } else {
-                    if (hasPieceColour(field.piece, state.playerColour)) {
+                    if (hasColour(field.piece, state.playerColour)) {
                         return markField(state, index)
                     } else {
                         // TODO handle capture
