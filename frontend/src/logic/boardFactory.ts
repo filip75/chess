@@ -119,18 +119,18 @@ export const createBoard = (type: GameType, colour: Colour): Field[] => {
             //     type: PieceType.Pawn,
             //     colour: Colour.White,
             // })
-            fields[56] = placePiece(fields[56], {
-                type: PieceType.Rook,
-                colour: Colour.White,
-            })
-            fields[57] = placePiece(fields[57], {
-                type: PieceType.Bishop,
-                colour: Colour.White,
-            })
-            fields[58] = placePiece(fields[58], {
-                type: PieceType.Knight,
-                colour: Colour.White,
-            })
+            // fields[56] = placePiece(fields[56], {
+            //     type: PieceType.Rook,
+            //     colour: Colour.White,
+            // })
+            // fields[57] = placePiece(fields[57], {
+            //     type: PieceType.Bishop,
+            //     colour: Colour.White,
+            // })
+            // fields[58] = placePiece(fields[58], {
+            //     type: PieceType.Knight,
+            //     colour: Colour.White,
+            // })
             fields[59] = placePiece(fields[59], {
                 type: PieceType.Queen,
                 colour: Colour.White,

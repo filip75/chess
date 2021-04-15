@@ -9,11 +9,6 @@ export interface Field {
     possible: boolean
 }
 
-export interface Coordinates {
-    row: number
-    column: number
-}
-
 export function isFieldEmpty(field: Field): boolean {
     return field.piece === null
 }
@@ -26,11 +21,11 @@ export function hasColour(piece: Piece | null, colour: Colour): boolean {
     return piece?.colour === colour
 }
 
-export function hasOppositeColour(
+export function hasTheSameColour(
     piece: Piece | null,
-    colour: Colour
+    anotherPiece: Piece | null
 ): boolean {
-    return piece?.colour !== colour
+    return piece?.colour === anotherPiece?.colour
 }
 export function deepCopyFields(fields: Field[]): Field[] {
     return fields.map((field) => ({ ...field }))

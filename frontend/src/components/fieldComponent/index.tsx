@@ -26,7 +26,7 @@ const FieldComponent: React.FC<Props> = ({
             }`}
             onClick={() => onClick(index)}
         >
-            {image && <img src={image} className={styles.piece} />}
+            {image && <img src={image} className={styles.piece} />} {index}
         </div>
     )
 }
